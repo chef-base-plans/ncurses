@@ -9,13 +9,18 @@ control 'core-plans-ncurses' do
   impact 1.0
   title 'Ensure ncurses binary is working as expected'
   desc '
-  We first check that the ncurses binary we expect is present and then run version checks on both to verify that it is excecutable.
+  To test the binaries that ncurses provides we first check for the installation directory.
+  Using this directory we then run checks to ensure the binary exists.
+  Then we test that the version of the binary we expect to be installed exists or another similar simple test
+    $ $PKG_PATH/bin/captoinfo -V
+      ncurses 6.1.20180127 
   '
 
   hab_pkg_path = command("hab pkg path #{plan_ident}")
   describe hab_pkg_path do
+    its('stdout') { should_not be_empty } 
+    its('stderr') { should be_empty }
     its('exit_status') { should eq 0 }
-    its('stdout') { should_not be_empty }
   end
 
   target_dir = File.join(hab_pkg_path.stdout.strip, base_dir)
@@ -29,7 +34,7 @@ control 'core-plans-ncurses' do
 
   captoinfo_works = command("#{File.join(target_dir, "captoinfo")} -V")
   describe captoinfo_works do
-    its('stdout') { should match /ncurses [0-9]+.[0-9]+.[0-9]+/ }
+    its('stdout') { should match /ncurses #{hab_pkg_path.stdout.strip.split('/')[5]}.[0-9]+/ }
     its('stderr') { should be_empty }
     its('exit_status') { should eq 0 }
   end
@@ -43,7 +48,7 @@ control 'core-plans-ncurses' do
 
   infocmp_works = command("#{File.join(target_dir, "infocmp")} -V")
   describe infocmp_works do
-    its('stdout') { should match /ncurses [0-9]+.[0-9]+.[0-9]+/ }
+    its('stdout') { should match /ncurses #{hab_pkg_path.stdout.strip.split('/')[5]}.[0-9]+/ }
     its('stderr') { should be_empty }
     its('exit_status') { should eq 0 }
   end
@@ -57,7 +62,7 @@ control 'core-plans-ncurses' do
 
   ncursesw6_config_works = command("#{File.join(target_dir, "ncursesw6-config")} --version")
   describe ncursesw6_config_works do
-    its('stdout') { should match /[0-9]+.[0-9]+.[0-9]+/ }
+    its('stdout') { should match /#{hab_pkg_path.stdout.strip.split('/')[5]}.[0-9]+/ }
     its('stderr') { should be_empty }
     its('exit_status') { should eq 0 }
   end
@@ -71,7 +76,7 @@ control 'core-plans-ncurses' do
 
   tabs_works = command("#{File.join(target_dir, "tabs")} -V")
   describe tabs_works do
-    its('stdout') { should match /ncurses [0-9]+.[0-9]+.[0-9]+/ }
+    its('stdout') { should match /ncurses #{hab_pkg_path.stdout.strip.split('/')[5]}.[0-9]+/ }
     its('stderr') { should be_empty }
     its('exit_status') { should eq 0 }
   end
@@ -85,7 +90,7 @@ control 'core-plans-ncurses' do
 
   toe_works = command("#{File.join(target_dir, "toe")} -V")
   describe toe_works do
-    its('stdout') { should match /ncurses [0-9]+.[0-9]+.[0-9]+/ }
+    its('stdout') { should match /ncurses #{hab_pkg_path.stdout.strip.split('/')[5]}.[0-9]+/ }
     its('stderr') { should be_empty }
     its('exit_status') { should eq 0 }
   end
@@ -99,7 +104,7 @@ control 'core-plans-ncurses' do
 
   tset_works = command("#{File.join(target_dir, "tset")} -V")
   describe tset_works do
-    its('stdout') { should match /ncurses [0-9]+.[0-9]+.[0-9]+/ }
+    its('stdout') { should match /ncurses #{hab_pkg_path.stdout.strip.split('/')[5]}.[0-9]+/ }
     its('stderr') { should be_empty }
     its('exit_status') { should eq 0 }
   end
@@ -113,7 +118,7 @@ control 'core-plans-ncurses' do
 
   clear_works = command("#{File.join(target_dir, "clear")} -V")
   describe clear_works do
-    its('stdout') { should match /ncurses [0-9]+.[0-9]+.[0-9]+/ }
+    its('stdout') { should match /ncurses #{hab_pkg_path.stdout.strip.split('/')[5]}.[0-9]+/ }
     its('stderr') { should be_empty }
     its('exit_status') { should eq 0 }
   end
@@ -127,7 +132,7 @@ control 'core-plans-ncurses' do
 
   infotocap_works = command("#{File.join(target_dir, "infotocap")} -V")
   describe infotocap_works do
-    its('stdout') { should match /ncurses [0-9]+.[0-9]+.[0-9]+/ }
+    its('stdout') { should match /ncurses #{hab_pkg_path.stdout.strip.split('/')[5]}.[0-9]+/ }
     its('stderr') { should be_empty }
     its('exit_status') { should eq 0 }
   end
@@ -141,7 +146,7 @@ control 'core-plans-ncurses' do
 
   reset_works = command("#{File.join(target_dir, "reset")} -V")
   describe reset_works do
-    its('stdout') { should match /ncurses [0-9]+.[0-9]+.[0-9]+/ }
+    its('stdout') { should match /ncurses #{hab_pkg_path.stdout.strip.split('/')[5]}.[0-9]+/ }
     its('stderr') { should be_empty }
     its('exit_status') { should eq 0 }
   end
@@ -155,7 +160,7 @@ control 'core-plans-ncurses' do
 
   tic_works = command("#{File.join(target_dir, "tic")} -V")
   describe tic_works do
-    its('stdout') { should match /ncurses [0-9]+.[0-9]+.[0-9]+/ }
+    its('stdout') { should match /ncurses #{hab_pkg_path.stdout.strip.split('/')[5]}.[0-9]+/ }
     its('stderr') { should be_empty }
     its('exit_status') { should eq 0 }
   end
@@ -169,7 +174,7 @@ control 'core-plans-ncurses' do
 
   tput_works = command("#{File.join(target_dir, "tput")} -V")
   describe tput_works do
-    its('stdout') { should match /ncurses [0-9]+.[0-9]+.[0-9]+/ }
+    its('stdout') { should match /ncurses #{hab_pkg_path.stdout.strip.split('/')[5]}.[0-9]+/ }
     its('stderr') { should be_empty }
     its('exit_status') { should eq 0 }
   end
