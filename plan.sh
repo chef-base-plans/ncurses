@@ -1,4 +1,5 @@
-pkg_name=ncurses
+pkg_name=ncurses5
+pkg_distname=ncurses
 pkg_origin=core
 pkg_version=6.1
 pkg_maintainer="The Habitat Maintainers <humans@habitat.sh>"
@@ -9,7 +10,8 @@ user interfaces in a terminal-independent manner.\
 "
 pkg_upstream_url="https://www.gnu.org/software/ncurses/"
 pkg_license=('ncurses')
-pkg_source="http://ftp.gnu.org/gnu/${pkg_name}/${pkg_name}-${pkg_version}.tar.gz"
+pkg_dirname="${pkg_distname}-${pkg_version}"
+pkg_source="http://ftp.gnu.org/gnu/${pkg_distname}/${pkg_dirname}.tar.gz"
 pkg_shasum="aa057eeeb4a14d470101eff4597d5833dcef5965331be3528c08d99cebaa0d17"
 pkg_deps=(
   core/glibc
@@ -27,6 +29,7 @@ pkg_include_dirs=(include)
 pkg_lib_dirs=(lib)
 
 do_build() {
+  # API Version 5 doesn't compile with --enable-ext-colors
   ./configure --prefix="$pkg_prefix" \
     --with-shared \
     --with-termlib \
@@ -38,11 +41,11 @@ do_build() {
     --with-pkg-config-libdir="$pkg_prefix/lib/pkgconfig" \
     --enable-symlinks \
     --enable-widec \
-    --enable-ext-colors \
     --without-debug \
     --with-normal \
     --enable-overwrite \
-    --disable-rpath-hack
+    --disable-rpath-hack \
+    --with-abi-version=5
   make
 }
 

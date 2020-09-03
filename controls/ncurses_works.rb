@@ -2,7 +2,7 @@ title 'Tests to confirm ncurses binary works as expected'
 
 base_dir = input("base_dir", value: "bin")
 plan_origin = ENV['HAB_ORIGIN']
-plan_name = input("plan_name", value: "ncurses")
+plan_name = input("plan_name")
 plan_ident = "#{plan_origin}/#{plan_name}"
 
 control 'core-plans-ncurses' do
@@ -53,14 +53,14 @@ control 'core-plans-ncurses' do
     its('exit_status') { should eq 0 }
   end
 
-  ncursesw6_config_exists = command("ls -al #{File.join(target_dir, "ncursesw6-config")}")
+  ncursesw6_config_exists = command("ls -al #{File.join(target_dir, "ncursesw5-config")}")
   describe ncursesw6_config_exists do
-    its('stdout') { should match /ncursesw6-config/ }
+    its('stdout') { should match /ncursesw5-config/ }
     its('stderr') { should be_empty }
     its('exit_status') { should eq 0 }
   end
 
-  ncursesw6_config_works = command("#{File.join(target_dir, "ncursesw6-config")} --version")
+  ncursesw6_config_works = command("#{File.join(target_dir, "ncursesw5-config")} --version")
   describe ncursesw6_config_works do
     its('stdout') { should match /#{hab_pkg_path.stdout.strip.split('/')[5]}.[0-9]+/ }
     its('stderr') { should be_empty }
